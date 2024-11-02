@@ -1,39 +1,39 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+  build-backend = "hatchling.build"
+  requires      = [ "hatchling" ]
 
 [project]
-name = "minitorch"
-version = "0.5"
+  name    = "minitorch"
+  version = "0.5"
 
 [tool.pyright]
-include = ["**/minitorch"]
-exclude = [
+  exclude = [
+    "**/.*",
+    "**/assignments",
     "**/docs",
     "**/docs/module1/**",
-    "**/assignments",
-    "**/project",
     "**/mt_diagrams",
-    "**/.*",
+    "**/project",
     "*chainrule.py*",
-]
-venvPath = "."
-venv = ".venv"
-reportUnknownMemberType = "none"
-reportUnknownParameterType = "none"
-reportUnknownArgumentType = "none"
-reportUnknownVariableType = "none"
-reportMissingTypeArgument = "none"
-reportMissingTypeStubs = "none"
-reportUnusedExpression = "none"
-reportUnknownLambdaType = "none"
-reportIncompatibleMethodOverride = "none"
-reportPrivateUsage = "none"
-reportMissingParameterType = "error"
+  ]
+  include = [ "**/minitorch" ]
+  reportIncompatibleMethodOverride = "none"
+  reportMissingParameterType = "error"
+  reportMissingTypeArgument = "none"
+  reportMissingTypeStubs = "none"
+  reportPrivateUsage = "none"
+  reportUnknownArgumentType = "none"
+  reportUnknownLambdaType = "none"
+  reportUnknownMemberType = "none"
+  reportUnknownParameterType = "none"
+  reportUnknownVariableType = "none"
+  reportUnusedExpression = "none"
+  venv = ".venv"
+  venvPath = "."
 
 
 [tool.pytest.ini_options]
-markers = [
+  markers = [
     "task0_0",
     "task0_1",
     "task0_2",
@@ -59,93 +59,95 @@ markers = [
     "task4_2",
     "task4_3",
     "task4_4",
-]
+  ]
 [tool.ruff]
 
-exclude = [
+  exclude = [
+    "**/docs/**/*",
+    "**/docs/slides/*",
+    "**/minitorch/testing.py",
+    "**/mt_diagrams/*",
+    "**/project/**/*",
     ".git",
     "__pycache__",
-    "**/docs/slides/*",
-    "old,build",
     "dist",
-    "**/project/**/*",
-    "**/mt_diagrams/*",
-    "**/minitorch/testing.py",
-    "**/docs/**/*",
-]
+    "old,build",
+  ]
 
-ignore = [
-    "ANN101",
-    "ANN401",
-    "N801",
-    "E203",
-    "E266",
-    "E501",
-    "E741",
-    "N803",
-    "N802",
-    "N806",
-    "D400",
-    "D401",
-    "D105",
-    "D415",
-    "D402",
-    "D205",
-    "D100",
-    "D101",
-    "D107",
-    "D213",
-    "ANN204",
-    "ANN102",
-]
-select = ["D", "E", "F", "N", "ANN"]
-fixable = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "I",
-    "N",
-    "Q",
-    "S",
-    "T",
-    "W",
-    "ANN",
-    "ARG",
-    "BLE",
-    "COM",
-    "DJ",
-    "DTZ",
-    "EM",
-    "ERA",
-    "EXE",
-    "FBT",
-    "ICN",
-    "INP",
-    "ISC",
-    "NPY",
-    "PD",
-    "PGH",
-    "PIE",
-    "PL",
-    "PT",
-    "PTH",
-    "PYI",
-    "RET",
-    "RSE",
-    "RUF",
-    "SIM",
-    "SLF",
-    "TCH",
-    "TID",
-    "TRY",
-    "UP",
-    "YTT",
-]
-unfixable = []
+  [tool.ruff.lint]
+    fixable = [
+      "A",
+      "ANN",
+      "ARG",
+      "B",
+      "BLE",
+      "C",
+      "COM",
+      "D",
+      "DJ",
+      "DTZ",
+      "E",
+      "EM",
+      "ERA",
+      "EXE",
+      "F",
+      "FBT",
+      "G",
+      "I",
+      "ICN",
+      "INP",
+      "ISC",
+      "N",
+      "NPY",
+      "PD",
+      "PGH",
+      "PIE",
+      "PL",
+      "PT",
+      "PTH",
+      "PYI",
+      "Q",
+      "RET",
+      "RSE",
+      "RUF",
+      "S",
+      "SIM",
+      "SLF",
+      "T",
+      "TCH",
+      "TID",
+      "TRY",
+      "UP",
+      "W",
+      "YTT",
+    ]
+    ignore = [
+      "ANN101",
+      "ANN102",
+      "ANN204",
+      "ANN401",
+      "D100",
+      "D101",
+      "D105",
+      "D107",
+      "D205",
+      "D213",
+      "D400",
+      "D401",
+      "D402",
+      "D415",
+      "E203",
+      "E266",
+      "E501",
+      "E741",
+      "N801",
+      "N802",
+      "N803",
+      "N806",
+      "D203",
+    ]
+    select = [ "ANN", "D", "E", "F", "N" ]
+    unfixable = [  ]
 
-[tool.ruff.extend-per-file-ignores]
-"tests/**/*.py" = ["D"]
+    [tool.ruff.lint.extend-per-file-ignores]
+      "tests/**/*.py" = [ "D" ]
