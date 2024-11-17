@@ -4,8 +4,8 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import lists
 
-from minitorch import MathTest
 import minitorch
+from minitorch import MathTest
 from minitorch.operators import (
     add,
     addLists,
@@ -23,6 +23,8 @@ from minitorch.operators import (
     relu,
     relu_back,
     sigmoid,
+    sigmoid_back,
+    sum,
 )
 
 from .strategies import assert_close, small_floats
@@ -105,43 +107,67 @@ def test_sigmoid(a: float) -> None:
     * It is always between 0.0 and 1.0.
     * one minus sigmoid is the same as sigmoid of the negative
     * It crosses 0 at 0.5
-    * It is  strictly increasing.
+    * It is strictly increasing.
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    # Test sigmoid is between 0 and 1
+    assert (lt(0, sigmoid(a)) or eq(0, sigmoid(a))) and (
+        lt(sigmoid(a), 1) or eq(sigmoid(a), 1)
+    ), "sigmoid is always between 0 and 1"
+
+    # Test one minus sigmoid equals sigmoid of negative, sigmoid is symmetric around 0.5
+    assert_close(add(1, neg(sigmoid(a))), sigmoid(neg(a)))
+
+    # Test sigmoid crosses 0.5 at x=0
+    assert_close(sigmoid(0), 0.5)
+
+    # Test strictly increasing property - for any x < y, sigmoid(x) < sigmoid(y)
+    assert lt(0, sigmoid_back(a, 1)) or eq(
+        0, sigmoid_back(a, 1)
+    ), "sigmoid should be strictly increasing"
 
 
 @pytest.mark.task0_2
 @given(small_floats, small_floats, small_floats)
 def test_transitive(a: float, b: float, c: float) -> None:
     """Test the transitive property of less-than (a < b and b < c implies a < c)"""
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    # Test implication on conjunction premise
+    if lt(a, b) and lt(b, c):
+        assert lt(a, c), "transitive property of less-than fails"
 
 
 @pytest.mark.task0_2
-def test_symmetric() -> None:
+@given(small_floats, small_floats)
+def test_symmetric(a: float, b: float) -> None:
     """Write a test that ensures that :func:`minitorch.operators.mul` is symmetric, i.e.
     gives the same value regardless of the order of its input.
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    # Test commutativity of multiplication
+    assert eq(
+        mul(int(a), int(b)), mul(int(b), int(a))
+    ), "multiplication is not commutative"
+    assert_close(mul(a, b), mul(b, a))
 
 
 @pytest.mark.task0_2
-def test_distribute() -> None:
+@given(small_floats, small_floats, small_floats)
+def test_distribute(a: float, x: float, y: float) -> None:
     r"""Write a test that ensures that your operators distribute, i.e.
     :math:`z \times (x + y) = z \times x + z \times y`
     """
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    # Test distributive property
+    assert eq(
+        mul(int(a), add(int(x), int(y))), add(mul(int(a), int(x)), mul(int(a), int(y)))
+    ), "distributive property fails"
+    assert_close(mul(a, add(x, y)), add(mul(a, x), mul(a, y)))
 
 
 @pytest.mark.task0_2
-def test_other() -> None:
+@given(small_floats, small_floats, small_floats)
+def test_other(a: float, b: float, c: float) -> None:
     """Write a test that ensures some other property holds for your functions."""
-    # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    # Test associativity of addition and multiplication
+    assert_close(add(a, add(b, c)), add(add(a, b), c))
+    assert_close(mul(a, mul(b, c)), mul(mul(a, b), c))
 
 
 # ## Task 0.3  - Higher-order functions
@@ -168,8 +194,7 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     """Write a test that ensures that the sum of `ls1` plus the sum of `ls2`
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
-    # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    assert_close(sum(addLists(ls1, ls2)), add(sum(ls1), sum(ls2)))
 
 
 @pytest.mark.task0_3
